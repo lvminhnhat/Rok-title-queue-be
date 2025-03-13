@@ -29,7 +29,7 @@ API này cung cấp các endpoint để:
 
 1. Clone repository:
 ```
-git clone https://github.com/lvminhnhat/rok-helper-backend.git 
+git clone https://github.com/lvminhnhat/Rok-title-queue-be.git
 cd rok-helper-backend
 ```
 
