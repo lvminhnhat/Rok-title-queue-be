@@ -1,0 +1,306 @@
+basePath: /
+definitions:
+  model.Config:
+    properties:
+      architect:
+        description: Thời gian giữ title Kiến trúc sư
+        type: integer
+      duke:
+        description: Thời gian giữ title Công tước
+        type: integer
+      justice:
+        description: Thời gian giữ title Công lý
+        type: integer
+      scientist:
+        description: Thời gian giữ title Nhà khoa học
+        type: integer
+    type: object
+  model.Local:
+    properties:
+      map:
+        description: map chỉ có thể có 2 dữ liệu là "home" hoặc "lost"
+        type: string
+      x:
+        type: string
+      "y":
+        type: string
+    type: object
+  model.TitleAssignment:
+    properties:
+      local:
+        allOf:
+        - $ref: '#/definitions/model.Local'
+        description: Vị trí của người chơi
+      player_id:
+        description: ID của người chơi
+        type: string
+      time_add:
+        description: Thời gian thêm title vào hàng đợi
+        type: integer
+      title:
+        description: Tên của title (Duke, Architect, Scientist, Justice)
+        type: string
+    type: object
+host: localhost:3000
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a ServerAPi for Rokhelper.
+  title: Fiber Swagger Example API
+  version: "1.0"
+paths:
+  /api/config/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get the title configuration
+      parameters:
+      - description: Kingdom ID or Discord Channel ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Config'
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get config
+      tags:
+      - config
+    put:
+      consumes:
+      - application/json
+      description: Edit title configuration
+      parameters:
+      - description: Kingdom ID or Discord Channel ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Config
+        in: body
+        name: config
+        required: true
+        schema:
+          $ref: '#/definitions/model.Config'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Edit config
+      tags:
+      - config
+  /api/maps/{id}:
+    put:
+      consumes:
+      - application/json
+      description: Edit home and lost kingdom maps
+      parameters:
+      - description: Kingdom ID or Discord Channel ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Maps
+        in: body
+        name: body
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Edit maps
+      tags:
+      - map
+  /api/title/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all titles for a Kingdom or Discord Channel
+      parameters:
+      - description: Kingdom ID or Discord Channel ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.TitleAssignment'
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get titles
+      tags:
+      - title
+    post:
+      consumes:
+      - application/json
+      description: Add a new title assignment
+      parameters:
+      - description: Kingdom ID or Discord Channel ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Title Assignment
+        in: body
+        name: titleAssignment
+        required: true
+        schema:
+          $ref: '#/definitions/model.TitleAssignment'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.TitleAssignment'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Add title
+      tags:
+      - title
+  /api/title/done/{id}:
+    post:
+      consumes:
+      - application/json
+      description: Mark a title assignment as done
+      parameters:
+      - description: Kingdom ID or Discord Channel ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Title Assignment
+        in: body
+        name: titleAssignment
+        required: true
+        schema:
+          $ref: '#/definitions/model.TitleAssignment'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.TitleAssignment'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Done title
+      tags:
+      - title
+  /api/title/finish/{id}:
+    post:
+      consumes:
+      - application/json
+      description: Mark a title assignment as finished
+      parameters:
+      - description: Kingdom ID or Discord Channel ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Title Assignment
+        in: body
+        name: titleAssignment
+        required: true
+        schema:
+          $ref: '#/definitions/model.TitleAssignment'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.TitleAssignment'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Finish title
+      tags:
+      - title
+swagger: "2.0"
